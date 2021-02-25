@@ -10,12 +10,21 @@
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
+  <div id="world"></div>
   <div id="leedom"></div>
+
+  <!-- use JSX -->
   <script type="text/babel">
     ReactDOM.render(
       <h1>Hello, world!</h1>,
-      document.getElementById('leedom')
+      document.getElementById('world')
     );
+  </script>
+
+  <!-- native -->
+  <script>
+    const el = React.createElement('h2', {className: 'leedom'}, 'Hello, Leedom!')
+    ReactDOM.render(el, document.getElementById("leedom"))
   </script>
 </body>
 </html>
