@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>hello world</title>
+  <title>expressions in jsx</title>
   
   <!-- Load React. -->
   <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
@@ -13,21 +13,24 @@
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
-  <div id="world"></div>
-  <div id="leedom"></div>
+  <div id="jsx"></div>
 
   <!-- use JSX -->
   <script type="text/babel">
+    const formatName = (user) => user.firstName + ' ' + user.lastName
+    const person = {
+      firstName: 'Leedom',
+      lastName: 'Jay'
+    }
+    // const getGreeting = (user) => {
+    //   if(user)  return <h1>Hello, { formatName( user ) }!</h1>
+    //   return <h1>Hello, Stranger!</h1>
+    // }
+    // getGreeting(person)
     ReactDOM.render(
-      <h1>Hello, world!</h1>,
-      document.getElementById('world')
+      <h1>Hello, { formatName( person ) }!</h1>,
+      document.getElementById('jsx')
     );
-  </script>
-
-  <!-- native -->
-  <script>
-    const el = React.createElement('h2', {className: 'leedom'}, 'Hello, Leedom!')
-    ReactDOM.render(el, document.getElementById("leedom"))
   </script>
 </body>
 </html>
