@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>tick</title>
+  <!-- 加载 React。-->
+  <!-- 注意: 部署时，将 "development.js" 替换为 "production.min.js"。-->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+  <div id="tick"></div>
+  <span id="start"></span>
+  <span id="stop"></span>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+    // timing
+    function tick(){
+      const time = new Date().toLocaleString()
+      const el = (
+        <div>
+          <h1>now, the time is</h1>
+          <h2>{ time }</h2>
+        </div>
+      )
+      ReactDOM.render(
+        el,
+        document.getElementById('tick')
+      );
+    }
+    // interval
+    let interval = setInterval(tick, 1000);
+
+    // start timimg
+    const start = <button onClick={() => { 
+      clearInterval(interval)
+      interval = setInterval(tick, 1000) 
+    }}>start</button>
+    ReactDOM.render(start, document.getElementById("start"))
+
+    // stop timimg
+    const stop = <button onClick={() => clearInterval(interval) }>stop</button>
+    ReactDOM.render(stop, document.getElementById("stop"))
+  </script>
+</body>
+</html>
