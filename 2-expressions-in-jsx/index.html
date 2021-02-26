@@ -14,23 +14,37 @@
 </head>
 <body>
   <div id="jsx"></div>
+  <span id="stranger"></span>
+  <span id="leedom"></span>
 
   <!-- use JSX -->
   <script type="text/babel">
     const formatName = (user) => user.firstName + ' ' + user.lastName
-    const person = {
+    let person = {
       firstName: 'Leedom',
       lastName: 'Jay'
     }
-    // const getGreeting = (user) => {
-    //   if(user)  return <h1>Hello, { formatName( user ) }!</h1>
-    //   return <h1>Hello, Stranger!</h1>
-    // }
-    // getGreeting(person)
+    const getGreeting = (user) => {
+      if(user)  return <h1>Hello, { formatName(user) }!</h1>
+      return <h1>Hello, Stranger!</h1>
+    }
     ReactDOM.render(
-      <h1>Hello, { formatName( person ) }!</h1>,
+      getGreeting(person),
       document.getElementById('jsx')
     );
+
+    // change person
+    const changePerson = (person) => { 
+      person = person
+      ReactDOM.render(
+        getGreeting(person),
+        document.getElementById('jsx')
+      );
+    }
+    // btn component
+    const ChangeEl = (props) => <button onClick={() => changePerson(props.person)}>{ props.btnName }</button>
+    ReactDOM.render(<ChangeEl btnName="stranger" person=""  />, document.getElementById('stranger'))
+    ReactDOM.render(<ChangeEl btnName="leedom" person={ person }  />, document.getElementById('leedom'))
   </script>
 </body>
 </html>
