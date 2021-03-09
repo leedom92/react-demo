@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>tick class component</title>
+  
+  <!-- Load React. -->
+  <script src="../src/production/react.js" crossorigin></script>
+  <script src="../src/production/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+</head>
+<body>
+  <div id="tick"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+    class Clock extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          time: new Date()
+        }
+      }
+
+      componentDidMount() {
+        this.interval = setInterval(() => {
+          this.tick()
+        }, 1000);
+      }
+
+      componentWillUnmount() {
+        clearInterval(this.interval)
+      }
+
+      tick() {
+        this.setState({
+          time: new Date()
+        })
+      }
+
+      startTick() {
+        clearInterval(this.interval)
+        this.interval = setInterval(() => {
+          this.tick()
+        }, 1000);
+      }
+
+      stopTick() {
+        clearInterval(this.interval)
+      }
+
+      render() {
+        return (
+          <div>
+            <h1>now, the time is</h1>
+            <h2>{ this.state.time.toLocaleString() }</h2>
+            <button onClick={() => this.startTick() }>start</button>
+            <button onClick={() => this.stopTick() }>stop</button>
+          </div>
+        )
+      }
+    }
+
+    ReactDOM.render(<Clock />, document.getElementById('tick'))
+  </script>
+</body>
+</html>
