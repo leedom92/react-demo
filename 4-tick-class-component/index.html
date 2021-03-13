@@ -40,14 +40,14 @@
         })
       }
 
-      startTick() {
+      startTick = () => {
         clearInterval(this.interval)
         this.interval = setInterval(() => {
           this.tick()
         }, 1000);
       }
 
-      stopTick() {
+      stopTick = () => {
         clearInterval(this.interval)
       }
 
@@ -56,8 +56,8 @@
           <div>
             <h1>now, the time is</h1>
             <h2>{ this.state.time.toLocaleString() }</h2>
-            <button onClick={() => this.startTick() }>start</button>
-            <button onClick={() => this.stopTick() }>stop</button>
+            <button onClick={ this.startTick }>start</button>
+            <button onClick={ this.stopTick }>stop</button>
           </div>
         )
       }
