@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>condition render</title>
+  
+  <!-- Load React. -->
+  <script src="../src/production/react.js" crossorigin></script>
+  <script src="../src/production/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+</head>
+<body>
+  <div id="condition"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+
+    function LoginPage(props) {
+      return props.isLogin ? (
+        <div>
+          <h2>Welcome Back, Master!</h2>
+        </div>
+      ) : (
+        <div>
+          <h2>Please Login</h2>
+        </div>
+      )
+    }
+    
+    class LoginOrLogout extends React.Component {
+      constructor(props){
+        super(props)
+        this.state = {
+          isLogin: false
+        }
+      }
+
+      handleClick = () => {
+        this.setState({
+          isLogin: !this.state.isLogin
+        })
+      }
+
+      render() {
+        return (
+          <div>
+            <LoginPage isLogin={ this.state.isLogin } />
+            <button onClick={ this.handleClick }>{ this.state.isLogin ? 'logout' : 'login' }</button>
+          </div>
+        )
+      }
+    }
+    ReactDOM.render(
+      <LoginOrLogout />,
+      document.getElementById('condition')
+    );
+  </script>
+</body>
+</html>
