@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>list key</title>
+  
+  <!-- Load React. -->
+  <script src="../src/production/react.js" crossorigin></script>
+  <script src="../src/production/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+</head>
+<body>
+  <div id="list"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+  const arr = [1,2,3,4,5,6]
+  
+  function ListItem(props) {
+    return <li>{ props.value }</li>
+  }
+  
+  ReactDOM.render(
+    <ul>
+      { arr.map(i => 
+        <ListItem 
+          key={ i.toString() } 
+          value={ i } 
+        />
+      ) }
+    </ul>,
+    document.getElementById('list')
+  )
+  </script>
+</body>
+</html>
