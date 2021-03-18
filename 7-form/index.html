@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>form</title>
+  
+  <!-- Load React. -->
+  <script src="../src/production/react.js" crossorigin></script>
+  <script src="../src/production/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+</head>
+<body>
+  <div id="form"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+
+  class Form extends React.Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        name: '',
+        type: '',
+        autologin: ''
+      }
+    }
+
+    fieldsChange = (e) => {
+      const name = e.target.name
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+      this.setState({
+        [name]: value
+      })
+    }
+
+    submitForm = (e) => {
+      alert(JSON.stringify(this.state))
+    }
+
+    render() {
+      return (
+        <form onSubmit={ this.submitForm }>
+          <label>
+            name:
+            <input name="name" type="text" value={ this.state.name } onChange={ this.fieldsChange } />  
+          </label>  
+          <label>
+            type:
+            <select name="type" value={ this.state.type } onChange={ this.fieldsChange }>
+              <option value=""></option>
+              <option value="student">student</option>
+              <option value="teacher">teacher</option>
+            </select>
+          </label>  
+          <label>
+            autologin:
+            <input name="autologin" type="checkbox" value={ this.state.autologin } onChange={ this.fieldsChange } />
+          </label>
+          <input type="submit" value="login" />
+        </form>
+      )
+    }
+  }
+
+  ReactDOM.render(
+    <Form />,
+    document.getElementById('form')
+  )
+  </script>
+</body>
+</html>
