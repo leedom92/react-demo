@@ -17,13 +17,47 @@
   <!-- use JSX -->
   <script type="text/babel">
 
+    function LoginPage(props) {
+      return (
+        <div>
+          <h2>welcome back, { props.name }</h2>
+          <button onClick={ props.logout }>logout</button>
+        </div>
+      )
+    }
+
+    function LogoutPage(props) {
+      return (
+        <form onSubmit={ props.submitForm }>
+          <label>
+            name:
+            <input name="name" type="text" value={ props.name } onChange={ props.fieldsChange } />  
+          </label>  
+          <label>
+            type:
+            <select name="type" value={ props.type } onChange={ props.fieldsChange }>
+              <option value=""></option>
+              <option value="student">student</option>
+              <option value="teacher">teacher</option>
+            </select>
+          </label>  
+          <label>
+            autologin:
+            <input name="autologin" type="checkbox" value={ props.autologin } onChange={ props.fieldsChange } />
+          </label>
+          <input type="submit" value="login" />
+        </form>
+      )
+    }
+
   class Form extends React.Component {
     constructor(props) {
       super(props)
       this.state = {
         name: '',
         type: '',
-        autologin: ''
+        autologin: '',
+        isLogin: false
       }
     }
 
@@ -36,30 +70,41 @@
     }
 
     submitForm = (e) => {
-      alert(JSON.stringify(this.state))
+      const data = this.state
+      for (const key in data) {
+        if(data[key] === ''){
+          alert(`plz input or select ${key}`)
+          return false
+        }
+      }
+      this.setState({
+        isLogin: true
+      })
+    }
+
+    logout = () => {
+      this.setState({
+        name: '',
+        type: '',
+        autologin: '',
+        isLogin: false
+      })
     }
 
     render() {
-      return (
-        <form onSubmit={ this.submitForm }>
-          <label>
-            name:
-            <input name="name" type="text" value={ this.state.name } onChange={ this.fieldsChange } />  
-          </label>  
-          <label>
-            type:
-            <select name="type" value={ this.state.type } onChange={ this.fieldsChange }>
-              <option value=""></option>
-              <option value="student">student</option>
-              <option value="teacher">teacher</option>
-            </select>
-          </label>  
-          <label>
-            autologin:
-            <input name="autologin" type="checkbox" value={ this.state.autologin } onChange={ this.fieldsChange } />
-          </label>
-          <input type="submit" value="login" />
-        </form>
+      return this.state.isLogin ? (
+        <LoginPage 
+          name={ this.state.name }
+          logout={ this.logout }
+        />
+      ) : (
+        <LogoutPage 
+          submitForm={this.submitForm}
+          name={ this.state.name } 
+          type={ this.state.type } 
+          autologin={ this.state.autologin } 
+          fieldsChange={ this.fieldsChange } 
+        />
       )
     }
   }
