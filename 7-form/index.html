@@ -16,16 +16,22 @@
 
   <!-- use JSX -->
   <script type="text/babel">
-
+    // login page
     function LoginPage(props) {
       return (
         <div>
-          <h2>welcome back, { props.name }</h2>
+          <h2>welcome back, { props.name }{ checkType(props.type) }</h2>
           <button onClick={ props.logout }>logout</button>
         </div>
       )
     }
 
+    // get user type
+    function checkType(type) {
+      return type === 'teacher' ? '教授' : '同学'
+    }
+
+    // form
     function LogoutPage(props) {
       return (
         <form onSubmit={ props.submitForm }>
@@ -54,13 +60,14 @@
     constructor(props) {
       super(props)
       this.state = {
-        name: '',
-        type: '',
-        autologin: '',
-        isLogin: false
+        name: localStorage.name || '',
+        type: localStorage.type || '',
+        autologin: localStorage.autologin ? JSON.parse(localStorage.autologin) : '',
+        isLogin: localStorage.isLogin ? JSON.parse(localStorage.isLogin) : false
       }
     }
 
+    // update field value
     fieldsChange = (e) => {
       const name = e.target.name
       const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
@@ -69,20 +76,30 @@
       })
     }
 
+    // submit form
     submitForm = (e) => {
       const data = this.state
       for (const key in data) {
+        console.log(data[key]);
         if(data[key] === ''){
+          localStorage.clear()
           alert(`plz input or select ${key}`)
           return false
         }
+        typeof data[key] === Boolean ? localStorage[key] = JSON.parse(data[key]) : localStorage[key] = data[key]
+        this.setState({
+          [key]: data[key]
+        })
       }
       this.setState({
         isLogin: true
       })
+      localStorage.setItem('isLogin', true)
     }
-
+    
+    // logout
     logout = () => {
+      localStorage.clear()
       this.setState({
         name: '',
         type: '',
@@ -95,6 +112,7 @@
       return this.state.isLogin ? (
         <LoginPage 
           name={ this.state.name }
+          type={ this.state.type }
           logout={ this.logout }
         />
       ) : (
