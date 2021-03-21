@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>form</title>
+
+  <!-- Load React. -->
+  <script src="../src/production/react.js" crossorigin></script>
+  <script src="../src/production/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="lift"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+    // money type
+    const moneyType = {
+      rmb: 'RMB',
+      yen: 'YEN'
+    }
+
+    // money convert
+    function convert(money, type) {
+      const value = parseFloat(money)
+      if (Number.isNaN(value)) return ''
+      return type === 'rmb' ? moneyFormat(money * 16.7312) : moneyFormat(money / 16.7312)
+    }
+
+    //convert to dollar
+    function convertDollar(rmb) {
+      const value = parseFloat(rmb)
+      if (Number.isNaN(rmb)) return ''
+      return moneyFormat(rmb / 6.507)
+    }
+
+    function moneyFormat(money) {
+      return Math.round(money * 10000) / 10000
+    }
+
+    // Dollar component
+    function Dollar(props) {
+      return (
+        <div>
+          <p>It can exchange DOLLAR <b>${convertDollar(props.money)}</b></p>
+        </div>
+      )
+    }
+
+    // Money component
+    class Money extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {}
+      }
+
+      handleChange = (e) => {
+        this.props.moneyChange(e.target.value)
+      }
+
+      render() {
+        const money = this.props.money
+        const type = this.props.type
+        return (
+          <fieldset>
+            <legend>Enter amount with {moneyType[type]}:</legend>
+            <input value={money}
+              onChange={this.handleChange} />
+          </fieldset>
+        )
+      }
+    }
+
+    // Calculate component
+    class Calculate extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          type: 'rmb',
+          money: null
+        }
+      }
+
+      rmbChange = (e) => {
+        this.setState({
+          type: 'rmb',
+          money: e
+        })
+      }
+
+      yenChange = (e) => {
+        this.setState({
+          type: 'yen',
+          money: e
+        })
+      }
+
+      render() {
+        const type = this.state.type
+        const money = this.state.money
+        const rmbMoney = type === 'rmb' ? money : convert(money, type)
+        const yenMoney = type === 'yen' ? money : convert(money, type)
+        return (
+          <div>
+            <Money type="rmb" money={rmbMoney} moneyChange={this.rmbChange} />
+            <Money type="yen" money={yenMoney} moneyChange={this.yenChange} />
+            <Dollar money={rmbMoney} />
+          </div>
+        )
+      }
+    }
+
+    ReactDOM.render(
+      <Calculate />,
+      document.getElementById('lift')
+    )
+  </script>
+</body>
+
+</html>
