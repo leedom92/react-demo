@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>composition</title>
+  
+  <!-- Load React. -->
+  <script src="../src/production/react.js" crossorigin></script>
+  <script src="../src/production/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+  <style>
+    .dialog-border{
+      border: 10px solid;
+      padding: 10px;
+    }
+    .dialog-border-skyblue{
+      border-color: skyblue;
+    }
+    .dialog-border-gray{
+      border-color: gray;
+    }
+    .dialog-border-pink{
+      border-color: pink;
+    }
+  </style>
+</head>
+<body>
+  <div id="composition"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+    function Dialog(props) {
+      return (
+        <div className={ 'dialog-border dialog-border-' + props.color }>
+          <div class="dialog-header">
+            { props.header || <h1>Dialog Header</h1> }  
+          </div>
+          { props.children || <h1>Leedom</h1>  }
+          <div class="dialog-footer">
+            { props.footer || <button onClick={() => alert('Welcome!') }>Click it</button> }
+          </div>
+        </div>
+      )
+    }
+
+    function Footer(props) {
+      return (
+        <button onClick={() => props.changeColor()}>change color</button>  
+      )
+    }
+
+    const colorData = ['gray', 'skyblue', 'pink']
+    class WelcomeDialog extends React.Component {
+      constructor(props){
+        super(props)
+        this.state = {
+          color: colorData[Math.floor(Math.random()*3)]
+        }
+      }
+
+      changeColor = () => {
+        console.log(Math.floor(Math.random()*3));
+        this.setState({
+          color: colorData[Math.floor(Math.random()*3)]
+        })
+      }
+
+      render() {
+        return (
+          <Dialog color={ this.state.color }
+            header={
+              <h2>Hello, Leedom!</h2>
+            }
+            footer={
+              <Footer 
+                changeColor={ this.changeColor }
+              />
+            }
+          >
+            <h3>Welcome!</h3>
+          </Dialog>
+        )
+      }
+    }
+    ReactDOM.render(
+      <WelcomeDialog />,
+      document.getElementById('composition')
+    );
+  </script>
+</body>
+</html>
