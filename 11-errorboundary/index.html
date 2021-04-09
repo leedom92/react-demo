@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>errorboundary</title>
+
+  <!-- Load React. -->
+  <script src="../src/development/react.js" crossorigin></script>
+  <script src="../src/development/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="errorboundary"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = { error: null, info: null }
+      }
+
+      componentDidCatch(error, info) {
+        this.setState({
+          error,
+          info
+        })
+      }
+
+      render() {
+        if (this.state.info) {
+          return (
+            <div>
+              <h1>something went wrong!</h1>
+              <details style={{ whiteSpace: 'pre-wrap' }}>
+                { this.state.error && this.state.error.toString() }
+                <br />
+                { this.state.info.componentStack }
+              </details>
+            </div>
+          )
+        }
+        return this.props.children
+      }
+    }
+
+    class Counter extends React.Component {
+      constructor(props) {
+        super(props)
+      
+        this.state = {
+           count: 0
+        }
+      }
+
+      handleClick = () => {
+        this.setState(prevState => {
+          console.log(this.state.count)
+          return { count: prevState.count+1 };
+        });
+      }
+
+      render() {
+        if(this.state.count === 6) {
+          throw new Error('I crashed!')
+        }
+        return (
+          <div>
+            <h3>Warning: when the count equals 6, I will crash!</h3>
+            <button onClick={ this.handleClick }>click: { this.state.count }</button>
+          </div>
+        )
+      }
+      
+    }
+
+    function App() {
+      return (
+        <div>
+          <ErrorBoundary>
+            <Counter />
+            <Counter />
+          </ErrorBoundary>
+          <hr />
+          <ErrorBoundary>
+            <Counter />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Counter />
+          </ErrorBoundary>
+        </div>
+      )
+    }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById('errorboundary')
+    );
+  </script>
+</body>
+
+</html>

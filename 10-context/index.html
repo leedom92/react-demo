@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>context</title>
+  
+  <!-- Load React. -->
+  <script src="../src/development/react.js" crossorigin></script>
+  <script src="../src/development/react-dom.js" crossorigin></script>
+
+  <!-- Don't use this in production: -->
+  <script src="../src/babel.min.js"></script>
+  <style>
+    .btn {
+      border: none;
+      outline: none;
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+    .btn-light {
+      color: #000;
+      background: #f0f0f0;
+    }
+    .btn-dark {
+      color: #fff;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- use JSX -->
+  <script type="text/babel">
+
+    // Context 可以让我们无须明确地传遍每一个组件，就能将值深入传递进组件树。
+    // 为当前的 theme 创建一个 context（“light”为默认值）。
+    const ThemeContext = React.createContext('light')
+    ThemeContext.displayName = 'Leedom'
+    
+    class App extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          theme: 'light'
+        }
+      }
+
+      toggleTheme = () => {
+        this.setState(
+          state => ({
+            theme: state.theme === 'light' ? 'dark' : 'light'
+          })
+        )
+      }
+
+      render() {
+        // 使用一个 Provider 来将当前的 theme 传递给以下的组件树。
+        // 无论多深，任何组件都能读取这个值。
+        // 在这个例子中，我们将 “dark” 作为当前的值传递下去。
+        return (
+          <ThemeContext.Provider value={ this.state.theme }>
+            <Toolbar changeTheme={ this.toggleTheme } />
+          </ThemeContext.Provider>
+        )
+      }
+    }
+
+    // 中间的组件再也不必指明往下传递 theme 了。
+    function Toolbar(props) {
+      return (
+        <div>
+          <ThemeButton onClick={ props.changeTheme } />
+        </div>
+      )
+    }
+
+    class ThemeButton extends React.Component {
+      // 指定 contextType 读取当前的 theme context。
+      // React 会往上找到最近的 theme Provider，然后使用它的值。
+      // 在这个例子中，当前的 theme 值为 “dark”。
+      static contextType = ThemeContext;
+      render() {
+        let props = this.props
+        const theme = this.context
+        return (
+          <button { ...props } className={'btn btn-' + theme} theme={theme}>click</button>
+        )
+      }
+    }
+
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById('app')
+    );
+  </script>
+</body>
+</html>
